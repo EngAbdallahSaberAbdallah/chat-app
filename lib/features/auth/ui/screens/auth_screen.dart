@@ -1,7 +1,9 @@
-import 'package:chat_app/core/di/dependency_injection.dart';
-import 'package:chat_app/core/helpers/spacing.dart';
+import 'package:chat_app/core/constants/string_manager.dart';
+import 'package:chat_app/core/helpers/validation.dart';
+import 'package:chat_app/core/theming/colors.dart';
+import 'package:chat_app/core/theming/styles.dart';
+import 'package:chat_app/core/widgets/app_text_form_field.dart';
 import 'package:chat_app/features/auth/logic/auth_cubit.dart';
-import 'package:chat_app/features/chat/logic/chat_cubit.dart';
 import 'package:chat_app/features/home/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +22,8 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(isLogin ? "Login" : "Sign Up")),
+      appBar: AppBar(
+          title: Text(isLogin ? StringsManager.login : StringsManager.signUp)),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
@@ -46,18 +49,24 @@ class _AuthScreenState extends State<AuthScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  TextField(
+                  AppTextFormField(
+                    backgroundColor: Colors.transparent,
+                    hintText: StringsManager.email,
+                    validator: (value) => value!.isEmpty
+                        ? StringsManager.enterTheEmailAddress
+                        : ValidationHelper.validateEmail(value),
                     controller: _emailController,
-                    decoration: const InputDecoration(labelText: 'Email'),
                   ),
                   SizedBox(
                     height: 20.h,
                   ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(labelText: 'Password'),
-                    obscureText: true,
-                  ),
+                  AppTextFormField(
+                      // isObscureText: true,
+                      backgroundColor: Colors.transparent,
+                      hintText: StringsManager.password,
+                      validator: (value) => value!.isEmpty
+                          ? StringsManager.enterYourPassword
+                          : ValidationHelper.validatePassword(value)),
                   const SizedBox(height: 16),
                   ElevatedButton(
                     onPressed: () {
@@ -73,7 +82,10 @@ class _AuthScreenState extends State<AuthScreen> {
                             );
                       }
                     },
-                    child: Text(isLogin ? "Login" : "Sign Up"),
+                    child: Text(
+                      isLogin ? StringsManager.login : StringsManager.signUp,
+                      style: TextStyles.font13BlueRegular,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   TextButton(
@@ -84,8 +96,9 @@ class _AuthScreenState extends State<AuthScreen> {
                     },
                     child: Text(
                       isLogin
-                          ? "Don't have an account? Sign Up"
-                          : "Already have an account? Login",
+                          ? StringsManager.doNotHaveAccount
+                          : StringsManager.alreadyHaveAnAccount,
+                      style: TextStyles.font13BlueRegular,
                     ),
                   ),
                 ],

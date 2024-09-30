@@ -1,10 +1,11 @@
+import 'package:chat_app/core/theming/colors.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
   static ThemeData get darkTheme {
     return ThemeData(
       brightness: Brightness.dark,
-      primaryColor: Colors.blueGrey,
+      primaryColor: ColorsManager.darkBlue,
       appBarTheme: const AppBarTheme(color: Colors.black),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,

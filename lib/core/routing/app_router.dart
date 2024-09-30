@@ -1,10 +1,7 @@
 import 'package:chat_app/core/routing/routes.dart';
-import 'package:chat_app/features/auth/ui/screens/login_screen.dart';
-import 'package:chat_app/features/auth/ui/screens/sign_up_screen.dart';
+import 'package:chat_app/features/auth/ui/screens/auth_screen.dart';
 import 'package:chat_app/features/home/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../di/dependency_injection.dart';
 
 class AppRouter {
   Route? generateRoute(RouteSettings settings) {
@@ -12,25 +9,18 @@ class AppRouter {
     final arguments = settings.arguments;
 
     switch (settings.name) {
-      
-      case Routes.loginScreen:
+      case Routes.authScreen:
         return MaterialPageRoute(
-          builder: (_) => LoginScreen(),
-                  );
-      case Routes.signUpScreen:
-        return MaterialPageRoute(
-          builder: (_) => SignUpScreen(),
-        
+          builder: (_) => AuthScreen(),
         );
+
       case Routes.homeScreen:
         return MaterialPageRoute(
-          builder: (_) =>  HomeScreen(),
-          
+          builder: (_) => HomeScreen(),
         );
-        case Routes.chatScreen:
+      case Routes.chatScreen:
         return MaterialPageRoute(
-          builder: (_) =>HomeScreen(),
-          
+          builder: (_) => HomeScreen(),
         );
       default:
         return null;
