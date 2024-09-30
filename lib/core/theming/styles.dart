@@ -73,13 +73,13 @@ class TextStyles {
   static TextStyle font12BlueRegular = TextStyle(
     fontSize: 12.sp,
     fontWeight: FontWeightHelper.regular,
-    color: ColorsManager.mainBlue,
+    color: ColorsManager.lightBlue,
   );
 
   static TextStyle font13BlueRegular = TextStyle(
     fontSize: 13.sp,
     fontWeight: FontWeightHelper.regular,
-    color: ColorsManager.mainBlue,
+    color: ColorsManager.lightBlue,
   );
 
   static TextStyle font14GrayRegular = TextStyle(
