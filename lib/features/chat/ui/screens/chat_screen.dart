@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
-  final String otherUserId; // ID of the person you're chatting with
+  final String otherUserId;
+  final String otherUserName;
 
   const ChatScreen({
     Key? key,
     required this.chatId,
     required this.otherUserId,
+    required this.otherUserName,
   }) : super(key: key);
 
   @override
@@ -22,12 +24,14 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
-    
+
     // Fetch messages when the screen is initialized
     context.read<ChatCubit>().fetchMessages(widget.chatId);
-    
+
     // Listen for real-time typing and online status changes
-    context.read<ChatCubit>().listenUserTypingStatus(widget.chatId, widget.otherUserId);
+    context
+        .read<ChatCubit>()
+        .listenUserTypingStatus(widget.chatId, widget.otherUserId);
     context.read<ChatCubit>().listenUserOnlineStatus(widget.otherUserId);
   }
 
@@ -37,18 +41,20 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         title: Row(
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               backgroundImage: AssetImage('assets/avatar.png'),
             ),
-            SizedBox(width: 8),
-            Text('Sebastian'),
+            const SizedBox(width: 8),
+            Text(widget.otherUserName),
             Spacer(),
             BlocBuilder<ChatCubit, ChatState>(
               builder: (context, state) {
                 if (state is ChatLoaded && state.isOnline) {
-                  return Icon(Icons.circle, color: Colors.green, size: 12); // Online
+                  return Icon(Icons.circle,
+                      color: Colors.green, size: 12); // Online
                 }
-                return Icon(Icons.circle, color: Colors.grey, size: 12); // Offline
+                return Icon(Icons.circle,
+                    color: Colors.grey, size: 12); // Offline
               },
             ),
             Icon(Icons.more_vert),
@@ -71,7 +77,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           itemCount: state.messages.length,
                           itemBuilder: (context, index) {
                             final message = state.messages[index];
-                            bool isMe = message.senderId == 'currentUserId'; // Replace with actual user ID
+                            bool isMe = message.senderId ==
+                                'currentUserId'; // Replace with actual user ID
                             return Align(
                               alignment: isMe
                                   ? Alignment.centerRight

@@ -1,9 +1,11 @@
 import 'package:chat_app/core/di/dependency_injection.dart';
+import 'package:chat_app/core/helpers/spacing.dart';
 import 'package:chat_app/features/auth/logic/auth_cubit.dart';
 import 'package:chat_app/features/chat/logic/chat_cubit.dart';
 import 'package:chat_app/features/home/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class AuthScreen extends StatefulWidget {
   @override
@@ -26,15 +28,7 @@ class _AuthScreenState extends State<AuthScreen> {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => MultiBlocProvider(
-                  providers: [
-                    BlocProvider<ChatCubit>(
-                      create: (_) => getIt<ChatCubit>(),
-                    ),
-                    // Add other BlocProviders if necessary
-                  ],
-                  child: HomeScreen(),
-                ),
+                builder: (context) => HomeScreen(),
               ),
             );
           } else if (state is Error) {
@@ -55,6 +49,9 @@ class _AuthScreenState extends State<AuthScreen> {
                   TextField(
                     controller: _emailController,
                     decoration: const InputDecoration(labelText: 'Email'),
+                  ),
+                  SizedBox(
+                    height: 20.h,
                   ),
                   TextField(
                     controller: _passwordController,

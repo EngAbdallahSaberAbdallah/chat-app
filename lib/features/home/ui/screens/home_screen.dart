@@ -45,8 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: users.length,
               itemBuilder: (context, index) {
                 final user = users[index];
-                final currentUserId = FirebaseAuth.instance.currentUser!.uid; // Get the current user ID
-                final chatId = context.read<ChatRepo>().getChatId(currentUserId, user.userId); // Replace 'currentUserId' with the actual user ID
+                final currentUserId = FirebaseAuth
+                    .instance.currentUser!.uid; // Get the current user ID
+                final chatId = context.read<ChatRepo>().getChatId(currentUserId,
+                    user.userId); // Replace 'currentUserId' with the actual user ID
 
                 return ListTile(
                   title: Text(user.name), // Updated to use username
@@ -58,7 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       MaterialPageRoute(
                         builder: (context) => BlocProvider(
                           create: (context) => getIt<ChatCubit>(),
-                          child: ChatScreen(chatId: chatId, otherUserId: user.userId), // Pass chatId and user ID
+                          child: ChatScreen(
+                            chatId: chatId,
+                            otherUserId: user.userId,
+                            otherUserName: user.name,
+                          ), // Pass chatId and user ID
                         ),
                       ),
                     );
