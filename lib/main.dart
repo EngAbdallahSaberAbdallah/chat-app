@@ -29,7 +29,10 @@ class ChatApp extends StatelessWidget {
           minTextAdapt: true,
           splitScreenMode: true,
           builder: (context, child) => MaterialApp(
-              title: 'Chat App', theme: AppTheme.darkTheme, home: AuthScreen()),
+              debugShowCheckedModeBanner: false,
+              title: 'Chat App',
+              theme: AppTheme.darkTheme,
+              home: AuthScreen()),
         ));
   }
 }
