@@ -103,6 +103,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     "Online",
                     style: TextStyles.font13BlueRegular,
                   ); // Online
+                } else if (state is ChatLoaded &&
+                    state.isOnline &&
+                    state.isTyping) {
+                  return Text(
+                    "Typing",
+                    style: TextStyles.font13BlueRegular,
+                  ); // Online
                 }
                 return Text("Offline",
                     style: TextStyles.font13BlueRegular
