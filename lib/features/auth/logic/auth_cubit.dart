@@ -16,6 +16,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthState.loading());
     try {
       final user = await _authRepo.signIn(email, password);
+      await SharedPrefHelper.setData(SharedPrefKeys.isLoggedIn, true);
       emit(AuthState.authenticated(user!));
     } on FirebaseAuthException catch (e) {
       emit(AuthState.error(e.message ?? 'Authentication Failed'));
@@ -26,7 +27,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(const AuthState.loading());
     try {
       final user = await _authRepo.signUp(email, password);
-    
+
       emit(AuthState.authenticated(user!));
     } on FirebaseAuthException catch (e) {
       emit(AuthState.error(e.message ?? 'Sign Up Failed'));

@@ -1,5 +1,9 @@
+import 'package:chat_app/core/constants/shred_pref_constants.dart';
 import 'package:chat_app/core/constants/string_manager.dart';
+import 'package:chat_app/core/helpers/extentions.dart';
+import 'package:chat_app/core/helpers/shared_pref_helper.dart';
 import 'package:chat_app/core/helpers/validation.dart';
+import 'package:chat_app/core/routing/routes.dart';
 import 'package:chat_app/core/theming/colors.dart';
 import 'package:chat_app/core/theming/styles.dart';
 import 'package:chat_app/core/widgets/app_text_form_field.dart';
@@ -20,6 +24,11 @@ class _AuthScreenState extends State<AuthScreen> {
   bool isLogin = true;
 
   @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -28,12 +37,7 @@ class _AuthScreenState extends State<AuthScreen> {
         listener: (context, state) {
           if (state is Authenticated) {
             // Navigate to HomeScreen
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
-              ),
-            );
+            context.pushReplacementNamed(Routes.homeScreen);
           } else if (state is Error) {
             // Show error
             ScaffoldMessenger.of(context).showSnackBar(
@@ -43,7 +47,10 @@ class _AuthScreenState extends State<AuthScreen> {
         },
         builder: (context, state) {
           if (state is Loading) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: ColorsManager.lightBlue,
+            ));
           } else {
             return Padding(
               padding: const EdgeInsets.all(16.0),
@@ -63,6 +70,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   AppTextFormField(
                       // isObscureText: true,
                       backgroundColor: Colors.transparent,
+                      controller: _passwordController,
                       hintText: StringsManager.password,
                       validator: (value) => value!.isEmpty
                           ? StringsManager.enterYourPassword

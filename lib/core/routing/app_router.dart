@@ -1,5 +1,6 @@
 import 'package:chat_app/core/routing/routes.dart';
 import 'package:chat_app/features/auth/ui/screens/auth_screen.dart';
+import 'package:chat_app/features/chat/ui/screens/chat_screen.dart';
 import 'package:chat_app/features/home/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -18,10 +19,11 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
         );
-      case Routes.chatScreen:
-        return MaterialPageRoute(
-          builder: (_) => HomeScreen(),
-        );
+      // case Routes.chatScreen:
+      //
+      //   return MaterialPageRoute(
+      //     builder: (_) => ChatScreen(chatId: chatId, otherUserId: otherUserId, otherUserName: otherUserName),
+      //   );
       default:
         return null;
     }

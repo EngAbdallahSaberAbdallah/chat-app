@@ -1,13 +1,13 @@
 import 'package:chat_app/features/chat/data/models/chat_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+const String chatsCollection = 'chats'; // Collection for chats
+const String messagesSubCollection =
+    'messages'; // Subcollection for chat messages
+const String usersCollection = 'users'; // Collection for users
+
 class ChatRepo {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  final String chatsCollection = 'chats'; // Collection for chats
-  final String messagesSubCollection =
-      'messages'; // Subcollection for chat messages
-  final String usersCollection = 'users'; // Collection for users
 
   /// Generate a unique chat ID based on user IDs
   String getChatId(String userId1, String userId2) {

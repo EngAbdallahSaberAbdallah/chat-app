@@ -1,3 +1,4 @@
+import 'package:chat_app/core/constants/assets_paths.dart';
 import 'package:chat_app/features/chat/logic/chat_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -42,7 +43,7 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Row(
           children: [
             const CircleAvatar(
-              backgroundImage: AssetImage('assets/avatar.png'),
+              backgroundImage: AssetImage(AssetsPaths.avatar),
             ),
             const SizedBox(width: 8),
             Text(widget.otherUserName),

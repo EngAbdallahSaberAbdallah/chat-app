@@ -1,5 +1,9 @@
+import 'package:chat_app/core/constants/shred_pref_constants.dart';
 import 'package:chat_app/core/di/dependency_injection.dart';
+import 'package:chat_app/core/helpers/shared_pref_helper.dart';
 import 'package:chat_app/core/resources/bloc_provider_manager.dart';
+import 'package:chat_app/core/routing/app_router.dart';
+import 'package:chat_app/core/routing/routes.dart';
 import 'package:chat_app/core/theming/app_theme.dart';
 import 'package:chat_app/features/auth/ui/screens/auth_screen.dart';
 import 'package:chat_app/firebase_options.dart';
@@ -12,11 +16,19 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   setupLocator();
-  runApp(const ChatApp());
+  await checkIfLoggedInUser();
+  runApp(ChatApp(
+    appRouter: AppRouter(),
+  ));
+}
+
+checkIfLoggedInUser() async {
+  isLoggedInUser = await SharedPrefHelper.getBool(SharedPrefKeys.isLoggedIn);
 }
 
 class ChatApp extends StatelessWidget {
-  const ChatApp({super.key});
+  final AppRouter appRouter;
+  const ChatApp({super.key, required this.appRouter});
 
   // This widget is the root of your application.
   @override
@@ -30,6 +42,9 @@ class ChatApp extends StatelessWidget {
           splitScreenMode: true,
           builder: (context, child) => MaterialApp(
               debugShowCheckedModeBanner: false,
+              initialRoute:
+                  isLoggedInUser ? Routes.homeScreen : Routes.authScreen,
+              onGenerateRoute: appRouter.generateRoute,
               title: 'Chat App',
               theme: AppTheme.darkTheme,
               home: AuthScreen()),
