@@ -1,4 +1,6 @@
 import 'package:chat_app/core/di/dependency_injection.dart';
+import 'package:chat_app/core/helpers/extentions.dart';
+import 'package:chat_app/core/routing/routes.dart';
 import 'package:chat_app/features/auth/logic/auth_cubit.dart';
 import 'package:chat_app/features/chat/data/repos/chat_repo.dart';
 import 'package:chat_app/features/chat/logic/chat_cubit.dart';
@@ -31,6 +33,10 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: const Icon(Icons.logout),
             onPressed: () {
               context.read<AuthCubit>().signOut();
+              context.pushNamedAndRemoveUntil(
+                Routes.authScreen,
+                predicate: (Route<dynamic> route) => false,
+              );
             },
           ),
         ],
@@ -45,13 +51,15 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: users.length,
               itemBuilder: (context, index) {
                 final user = users[index];
-                final currentUserId = FirebaseAuth
-                    .instance.currentUser!.uid; // Get the current user ID
-                final chatId = context.read<ChatRepo>().getChatId(currentUserId,
-                    user.userId); // Replace 'currentUserId' with the actual user ID
+                final currentUserId = FirebaseAuth.instance.currentUser!.uid;
+                final chatId = context
+                    .read<ChatCubit>()
+                    .generateChatId(currentUserId, user.userId);
 
                 return ListTile(
-                  title: Text(user.name), // Updated to use username
+                  title: Text(user.name != "null"
+                      ? user.name
+                      : "Unknown"), // Updated to use username
                   subtitle: Text(user.email),
                   onTap: () {
                     // Navigate to chat screen with the selected user
@@ -63,7 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: ChatScreen(
                             chatId: chatId,
                             otherUserId: user.userId,
-                            otherUserName: user.name,
+                            otherUserName:
+                                user.name != "null" ? user.name : "Unknown",
                           ), // Pass chatId and user ID
                         ),
                       ),

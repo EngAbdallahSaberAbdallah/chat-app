@@ -1,7 +1,13 @@
 import 'package:chat_app/core/constants/assets_paths.dart';
+import 'package:chat_app/core/helpers/extentions.dart';
+import 'package:chat_app/core/helpers/spacing.dart';
+import 'package:chat_app/core/theming/colors.dart';
+import 'package:chat_app/core/theming/styles.dart';
 import 'package:chat_app/features/chat/logic/chat_cubit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatScreen extends StatefulWidget {
   final String chatId;
@@ -40,25 +46,69 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          children: [
-            const CircleAvatar(
+        actions: [
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8.5.w),
+            child: CircleAvatar(
               backgroundImage: AssetImage(AssetsPaths.avatar),
             ),
-            const SizedBox(width: 8),
-            Text(widget.otherUserName),
-            Spacer(),
+          )
+        ],
+        leadingWidth: 70,
+        leading: Padding(
+          padding: EdgeInsets.only(left: 8.5.w),
+          child: InkWell(
+            onTap: () => context.pop(),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: ColorsManager.lightBlue,
+                  size: 20.58.sp,
+                ),
+                SizedBox(
+                  width: 2.w,
+                ),
+                Container(
+                  width: 29.w,
+                  height: 18.h,
+                  decoration: BoxDecoration(
+                      color: ColorsManager.lightBlue,
+                      borderRadius: BorderRadius.circular(9.r)),
+                  alignment: Alignment.center,
+                  child: Text(
+                    "1",
+                    textAlign: TextAlign.center,
+                    style: TextStyles.font13BlueRegular
+                        .copyWith(color: Colors.white),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        centerTitle: true,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              widget.otherUserName,
+              style: TextStyles.font17WhiteSemiBold,
+            ),
             BlocBuilder<ChatCubit, ChatState>(
               builder: (context, state) {
                 if (state is ChatLoaded && state.isOnline) {
-                  return Icon(Icons.circle,
-                      color: Colors.green, size: 12); // Online
+                  return Text(
+                    "Online",
+                    style: TextStyles.font13BlueRegular,
+                  ); // Online
                 }
-                return Icon(Icons.circle,
-                    color: Colors.grey, size: 12); // Offline
+                return Text("Offline",
+                    style: TextStyles.font13BlueRegular
+                        .copyWith(color: ColorsManager.lightGray)); // Offline
               },
             ),
-            Icon(Icons.more_vert),
           ],
         ),
       ),
@@ -68,7 +118,10 @@ class _ChatScreenState extends State<ChatScreen> {
             child: BlocBuilder<ChatCubit, ChatState>(
               builder: (context, state) {
                 if (state is ChatLoading) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.lightBlue,
+                  ));
                 } else if (state is ChatLoaded) {
                   return Column(
                     children: [
@@ -79,7 +132,7 @@ class _ChatScreenState extends State<ChatScreen> {
                           itemBuilder: (context, index) {
                             final message = state.messages[index];
                             bool isMe = message.senderId ==
-                                'currentUserId'; // Replace with actual user ID
+                                FirebaseAuth.instance.currentUser!.uid;
                             return Align(
                               alignment: isMe
                                   ? Alignment.centerRight
@@ -89,8 +142,10 @@ class _ChatScreenState extends State<ChatScreen> {
                                     horizontal: 16, vertical: 4),
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: isMe ? Colors.blue : Colors.grey[800],
-                                  borderRadius: BorderRadius.circular(12),
+                                  color: isMe
+                                      ? ColorsManager.mainBlue
+                                      : ColorsManager.darkGray,
+                                  borderRadius: BorderRadius.circular(16.r),
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

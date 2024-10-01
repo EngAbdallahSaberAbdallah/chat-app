@@ -22,10 +22,12 @@ class AuthRepo {
         .collection(usersCollection)
         .doc(userCredential.user!.uid)
         .set({
+      'uid': userCredential.user!.uid,
       'userName': userCredential.user!.displayName,
       'email': userCredential.user!.email,
       'avatarUrl': userCredential.user!.photoURL,
     });
+
     return userCredential.user;
   }
 
